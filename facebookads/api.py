@@ -680,6 +680,11 @@ class FacebookRequest:
        self._response = response
 
     def load(self): 
+        if self._response is None:
+            raise FacebookUnavailablePropertyException(
+                "Couldn't retrieve the response for this request"
+            )
+
         params = copy.deepcopy(self._params)
         if self._response.error():
             raise response.error()
