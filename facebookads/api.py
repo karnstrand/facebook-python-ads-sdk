@@ -530,6 +530,9 @@ class FacebookAdsApiBatch(object):
         else:
             return None
 
+    def requests(self): 
+        return iter(self._requests)
+
 
 class FacebookRequest:
     """
