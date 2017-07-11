@@ -294,6 +294,40 @@ class AdSet(
             self.assure_call()
             return request.execute()
 
+    def get_delivery_estimate(self, fields=None, params=None, batch=None, pending=False):
+        from facebookads.adobjects.deliveryestimate import DeliveryEstimate
+        param_types = {
+            'currency': 'string',
+            'daily_budget': 'float',
+            'object_store_url': 'string',
+            'optimize_for': 'optimization_goal_enum',
+            'targeting_spec': 'Targeting',
+        }
+        enums = {
+            'optimization_goal_enum': DeliveryEstimate.OptimizationGoal.__dict__.values(),
+        }
+        request = FacebookRequest(
+            node_id=self['id'],
+            method='GET',
+            endpoint='/delivery_estimate',
+            api=self._api,
+            param_checker=TypeChecker(param_types, enums),
+            target_class=DeliveryEstimate,
+            api_type='EDGE',
+            response_parser=ObjectParser(target_class=DeliveryEstimate),
+        )
+        request.add_params(params)
+        request.add_fields(fields)
+
+        if batch is not None:
+            request.add_to_batch(batch)
+            return request
+        elif pending:
+            return request
+        else:
+            self.assure_call()
+            return request.execute()
+
     def get_activities(self, fields=None, params=None, batch=None, pending=False):
         from facebookads.adobjects.adactivity import AdActivity
         param_types = {
